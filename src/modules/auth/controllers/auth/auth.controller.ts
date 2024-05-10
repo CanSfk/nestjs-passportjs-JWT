@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { LocalAuthGuard } from '../../utils/local-auth.guard';
 import { AuthenticatedGuard } from '../../utils/authenticated.guard';
 import { Request } from 'express';
+import { JwtAuthGuard } from '../../utils/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -13,10 +14,10 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Req() req: Request): any {
-    return req.user;
+    return this.authService.login(req.user);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('protected')
   getHello(@Req() req: Request) {
     return {
